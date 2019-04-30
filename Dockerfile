@@ -37,8 +37,3 @@ RUN wget -Y on --no-check-certificate https://d3kbcqa49mib13.cloudfront.net/spar
 RUN tar xvzf spark-2.2.0-bin-hadoop2.7.tgz
 RUN mv spark-2.2.0-bin-hadoop2.7 $HOME/spark
 RUN rm spark-2.2.0-bin-hadoop2.7.tgz
-
-#ENV SPARK_HOME $HOME/spark
-#ENV PATH $PATH:$HOME/spark/bin
-#ADD setenv.sh /home/guest/setenv.sh
-#RUN echo . ./setenv.sh >> .bashrc
