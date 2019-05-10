@@ -1,0 +1,97 @@
+version : "3"
+
+services:
+  LocalClusterNetwork.spark.master0:
+    image: foodytechnologies/spark-openjdk8-alpine
+    depends_on:
+      - LocalClusterNetwork.spark.zookeeper.1
+      - LocalClusterNetwork.spark.zookeeper.2
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    environment:
+      - "SPARK_MASTER_PORT=7077"
+      - "SPARK_MASTER_WEBUI_PORT=8080"
+      - "SPARK_RECOVERYMODE=ZOOKEEPER"
+      - "SPARK_ZOOKEEPER_URL=LocalClusterNetwork.spark.zookeeper.1:2181,LocalClusterNetwork.spark.zookeeper.2:2181"
+      - "SPARK_ZOOKEEPER_DIR=/home/guest/ZookeeperRecoveryMode"
+    command: bash /home/guest/StartMaster.sh
+    networks:
+      LocalClusterNetwork :
+
+  LocalClusterNetwork.spark.master1:
+    image: foodytechnologies/spark-openjdk8-alpine
+    depends_on:
+      - LocalClusterNetwork.spark.zookeeper.1
+      - LocalClusterNetwork.spark.zookeeper.2
+    ports:
+      - "18080:8080"
+      - "17077:7077"
+    environment:
+      - "SPARK_MASTER_PORT=7077"
+      - "SPARK_MASTER_WEBUI_PORT=8080"
+      - "SPARK_RECOVERYMODE=ZOOKEEPER"
+      - "SPARK_ZOOKEEPER_URL=LocalClusterNetwork.spark.zookeeper.1:2181,LocalClusterNetwork.spark.zookeeper.2:2181"
+      - "SPARK_ZOOKEEPER_DIR=/home/guest/ZookeeperRecoveryMode"
+    command: bash /home/guest/StartMaster.sh
+    networks:
+      LocalClusterNetwork :
+
+  LocalClusterNetwork.spark.Slave:
+    image: foodytechnologies/spark-openjdk8-alpine
+    depends_on:
+      - LocalClusterNetwork.spark.master0
+      - LocalClusterNetwork.spark.master1
+    ports:
+      - "8081"
+    environment:
+      - "SPARK_MASTERI=spark://LocalClusterNetwork.spark.master0:7077,LocalClusterNetwork.spark.master1:7077"
+      - "SPARK_WORKER_WEBUI_PORT=8081"
+      - "SPARK_WORKER_INSTANCES=5"
+    command: bash /home/guest/StartSlave.sh
+    networks:
+      LocalClusterNetwork :
+
+  LocalClusterNetwork.spark.application:
+    image: foodytechnologies/spark-openjdk8-alpine
+    container_name: ApplicationSubmitter
+    depends_on:
+      - LocalClusterNetwork.spark.Slave
+    volumes:
+      - ./data/dockervolumes/applications/:/apps
+      - ./data/dockervolumes/logs/:/appslogs
+      - ./data/dockervolumes/data:/data
+    environment:
+        - "SPARK_MASTER=spark://LocalClusterNetwork.spark.master0:7077,LocalClusterNetwork.spark.master1:7077"
+    command: tail -f /dev/null
+    networks:
+      LocalClusterNetwork :
+
+  LocalClusterNetwork.spark.zookeeper.1:
+    image: 31z4/zookeeper
+    restart: always
+    ports:
+      - 2181:2181
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=LocalClusterNetwork.spark.zookeeper.2:2888:3888
+    networks:
+      LocalClusterNetwork :
+
+  LocalClusterNetwork.spark.zookeeper.2:
+    image: 31z4/zookeeper
+    restart: always
+    ports:
+      - 2182:2181
+    environment:
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: server.1=LocalClusterNetwork.spark.zookeeper.1:2888:3888 server.2=0.0.0.0:2888:3888
+    networks:
+      LocalClusterNetwork :
+
+networks:
+  LocalClusterNetwork:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.27.0.0/16
