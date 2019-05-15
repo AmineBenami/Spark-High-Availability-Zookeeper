@@ -6,7 +6,7 @@ To run simple container<br/>
 `docker run -p 4040:4040 -dti --privileged foodytechnologies/spark-openjdk11-alpine`<br/>
 <br/>
 ## Setup Cluster
-It's a Spark Standalone Cluster With Zookeepercomposed of two zookeeper server, two spark masters, two slaves with each of them 5 workers and 1 application submitter<br/>
+It's a Spark Standalone Cluster With Zookeeper composed of two zookeeper server, two spark masters, two slaves with each of them 5 workers and 1 application submitter<br/>
 `docker-compose up -d --scale LocalClusterNetwork.spark.Slave=2`<br/>
 <br/>
 ## Launch Applications on Spark Cluster
