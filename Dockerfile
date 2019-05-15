@@ -21,7 +21,4 @@ RUN tar xvzf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 RUN mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} $SPARK_HOME
 RUN rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 RUN mkdir /home/guest/ZookeeperRecoveryMode
-COPY Init.sh /home/guest
-COPY StartMaster.sh /home/guest
-COPY StartSlave.sh /home/guest
-COPY StartApplication.sh /home/guest
+COPY launchers/* /home/guest/
