@@ -4,9 +4,12 @@ To get the image<br/>
 `docker pull foodytechnologies/spark-openjdk8-alpine`<br/>
 To run simple container<br/>
 `docker run -p 4040:4040 -dti --privileged foodytechnologies/spark-openjdk11-alpine`<br/>
+<br/>
 ## Setup Cluster
 It's a Spark Standalone Cluster With Zookeepercomposed of two zookeeper server, two spark masters, two slaves with each of them 5 workers and 1 application submitter<br/>
 `docker-compose up -d --scale LocalClusterNetwork.spark.Slave=2`<br/>
+<br/>
+## Launch Applications on Spark Cluster
 To launch a local python application<br/>
 ` docker exec -ti ApplicationSubmitter sh StartApplication.sh /apps/python-apps/example.py`<br/>
 To Launch a local java application, we move applications to local `./data/dockervolumes/applications` directory bound to Application and slaves containers on `/apps`. We can also pass files as arguments to applicationsif they are placed on local directory `./data/dockervolumes/data` (we should give it authorization of write if applications will save some files on it), this directory is bound to containers on `/data` <br/>
