@@ -3,6 +3,7 @@ version : "3"
 services:
   LocalClusterNetwork.spark.master0:
     image: foodytechnologies/spark-openjdk8-alpine
+    container_name: Master0
     depends_on:
       - LocalClusterNetwork.spark.zookeeper.1
       - LocalClusterNetwork.spark.zookeeper.2
@@ -21,6 +22,7 @@ services:
 
   LocalClusterNetwork.spark.master1:
     image: foodytechnologies/spark-openjdk8-alpine
+    container_name: Master1
     depends_on:
       - LocalClusterNetwork.spark.zookeeper.1
       - LocalClusterNetwork.spark.zookeeper.2
@@ -44,10 +46,14 @@ services:
       - LocalClusterNetwork.spark.master1
     ports:
       - "8081"
+    volumes:
+      - ./data/dockervolumes/applications/:/apps
+      - ./data/dockervolumes/logs/:/appslogs:z
+      - ./data/dockervolumes/data/:/data:z
     environment:
       - "SPARK_MASTERI=spark://LocalClusterNetwork.spark.master0:7077,LocalClusterNetwork.spark.master1:7077"
       - "SPARK_WORKER_WEBUI_PORT=8081"
-      - "SPARK_WORKER_INSTANCES=5"
+      - "SPARK_WORKER_INSTANCES=1"
     command: bash /home/guest/StartSlave.sh
     networks:
       LocalClusterNetwork :
@@ -57,10 +63,12 @@ services:
     container_name: ApplicationSubmitter
     depends_on:
       - LocalClusterNetwork.spark.Slave
+    ports:
+      - "4040:4040"
     volumes:
       - ./data/dockervolumes/applications/:/apps
-      - ./data/dockervolumes/logs/:/appslogs
-      - ./data/dockervolumes/data:/data
+      - ./data/dockervolumes/logs/:/appslogs:z
+      - ./data/dockervolumes/data/:/data:z
     environment:
         - "SPARK_MASTER=spark://LocalClusterNetwork.spark.master0:7077,LocalClusterNetwork.spark.master1:7077"
     command: tail -f /dev/null

@@ -1,0 +1,3 @@
+Spark properties control most application parameters and can be set by using a SparkConf object, or through Java system properties.
+Environment variables can be used to set per-machine settings, such as the IP address, through the conf/spark-env.sh script on each node.
+Logging can be configured through log4j.properties.

@@ -7,8 +7,9 @@ ENV SPARK_VERSION 2.2.0
 ENV HADOOP_VERSION 2.7
 ENV SPARK_HOME /home/guest/spark
 RUN apk update
-RUN apk add --no-cache coreutils procps shadow openssl bash openjdk8="$JAVA_ALPINE_VERSION"  python3-dev="$PYTHON_VERSION" && ln -s /usr/bin/python3 /usr/bin/python
+RUN apk add --no-cache coreutils procps shadow openssl bash libc6-compat openjdk8="$JAVA_ALPINE_VERSION"  python3-dev="$PYTHON_VERSION" && ln -s /usr/bin/python3 /usr/bin/python
 ENV HOME /home/guest
+ENV LD_LIBRARY_PATH /lib64
 RUN mkdir -p $HOME
 RUN usermod -d $HOME guest
 RUN groups guest

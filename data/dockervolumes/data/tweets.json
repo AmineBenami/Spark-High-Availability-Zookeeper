@@ -1,0 +1,3 @@
+{"name":"John Lennon", "receiveTweets":true}
+{"name": "Sylvie Vartan"}
+{"name":"Brandon Lee", "receiveTweets":true, "knows":{"friends": ["John Lennon"]}}
