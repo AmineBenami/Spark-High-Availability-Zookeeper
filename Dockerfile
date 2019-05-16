@@ -1,4 +1,5 @@
 FROM alpine:latest
+MAINTAINER Amine Ben Belgacem <amin.benbelkacem@gmail.com>
 ENV LANG C.UTF-8
 ENV JAVA_VERSION 8u202
 ENV PYTHON_VERSION 3.6.8-r2

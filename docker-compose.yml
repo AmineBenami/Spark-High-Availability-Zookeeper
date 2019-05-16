@@ -46,6 +46,7 @@ services:
       - LocalClusterNetwork.spark.master1
     ports:
       - "8081"
+      - "4040"
     volumes:
       - ./data/dockervolumes/applications/:/apps
       - ./data/dockervolumes/logs/:/appslogs:z
