@@ -66,6 +66,8 @@ services:
       - LocalClusterNetwork.spark.Slave
     ports:
       - "4040:4040"
+    # We expose this range of ports to allow communication and expose contexts with thrift standalone server internally in network
+    expose: ["1010-1100"]
     volumes:
       - ./data/dockervolumes/applications/:/apps
       - ./data/dockervolumes/logs/:/appslogs:z
@@ -75,6 +77,28 @@ services:
     command: tail -f /dev/null
     networks:
       LocalClusterNetwork :
+
+
+  LocalClusterNetwork.spark.thriftserver:
+    image: foodytechnologies/spark-openjdk8-alpine
+    container_name: ThriftServer
+    depends_on:
+      - LocalClusterNetwork.spark.master0
+      - LocalClusterNetwork.spark.master1
+    ports:
+        - "10000:10000"
+    volumes:
+      - ./data/dockervolumes/applications/:/apps
+      - ./data/dockervolumes/logs/:/appslogs:z
+      - ./data/dockervolumes/data/:/data:z
+    environment:
+        - "SPARK_MASTERI=spark://LocalClusterNetwork.spark.master0:7077,LocalClusterNetwork.spark.master1:7077"
+        - "TOTAL_EXECUTORS=3"
+        - "WAREHOUSE_DIR=/data/warehouse"
+    command: bash /home/guest/StartThriftServer.sh
+    networks:
+      LocalClusterNetwork :
+
 
   LocalClusterNetwork.spark.zookeeper.1:
     image: 31z4/zookeeper
