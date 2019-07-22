@@ -13,7 +13,9 @@ It's a Spark Standalone Cluster With Zookeeper composed of two zookeeper server,
 To launch a local python application<br/>
 ` docker exec -ti ApplicationSubmitter sh StartApplication.sh /apps/python-apps/example.py`<br/>
 <br/>
-To Launch a local java application, we move applications to local `./data/dockervolumes/applications` directory bound to Application and slaves containers on `/apps`. We can also pass files as arguments to applicationsif they are placed on local directory `./data/dockervolumes/data` (we should give it authorization of write if applications will save some files on it), this directory is bound to containers on `/data` <br/><br/>
+To Launch a local java application, we move applications to local `./data/dockervolumes/applications` directory bound to Application and slaves containers on `/apps`.<br/>
+We can also pass files as arguments to applications if they are placed on local directory `./data/dockervolumes/data` (we should give it write authorization if applications will save some files on it)
+This directory is bound to containers on `/data` path<br/><br/>
 ## Examples
 **_Manipulate a json file and generate a new one:_**<br/> `docker exec -ti ApplicationSubmitter sh StartApplication.sh --class  com.databootcamp.sparkjobs.BasicLoadJson /apps/java-apps/target/sparkjobs-1.0.0-SNAPSHOT.jar /data/tweets.json /data/HaveTweets`<br/>
 **_Basic Flat Map by reading a file:_**<br/>`docker exec -ti ApplicationSubmitter sh StartApplication.sh --class  com.databootcamp.sparkjobs.BasicFlatMap /apps/java-apps/target/sparkjobs-1.0.0-SNAPSHOT.jar /data/spark.txt`<br/>
