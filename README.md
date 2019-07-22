@@ -15,7 +15,11 @@ To launch a local python application<br/>
 <br/>
 To Launch a local java application, we move applications to local `./data/dockervolumes/applications` directory bound to Application and slaves containers on `/apps`. We can also pass files as arguments to applicationsif they are placed on local directory `./data/dockervolumes/data` (we should give it authorization of write if applications will save some files on it), this directory is bound to containers on `/data` <br/><br/>
 ## Examples
-Manipulate a json file and generate a new one:<br/> `docker exec -ti ApplicationSubmitter sh StartApplication.sh --class  com.databootcamp.sparkjobs.BasicLoadJson /apps/java-apps/target/sparkjobs-1.0.0-SNAPSHOT.jar /data/tweets.json /data/HaveTweets`<br/>
-Basic Flat Map by reading a file: <br/>`docker exec -ti ApplicationSubmitter sh StartApplication.sh --class  com.databootcamp.sparkjobs.BasicFlatMap /apps/java-apps/target/sparkjobs-1.0.0-SNAPSHOT.jar /data/spark.txt`<br/>
-Basic Avg: <br/>`docker exec -ti ApplicationSubmitter sh StartApplication.sh --class  com.databootcamp.sparkjobs.BasicAvg /apps/java-apps/target/sparkjobs-1.0.0-SNAPSHOT.jar`<br/>
-Expose Context with thrift server: <br/>`docker exec -ti ApplicationSubmitter sh StartApplication.sh --class  com.databootcamp.sparkjobs.ExposeContethLiveThrift /apps/java-apps/target/sparkjobs-1.0.0-SNAPSHOT.jar `docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ApplicationSubmitter` 10011 /data/tweets.json exposethecontext`<br/>
+**_Manipulate a json file and generate a new one:_**<br/> `docker exec -ti ApplicationSubmitter sh StartApplication.sh --class  com.databootcamp.sparkjobs.BasicLoadJson /apps/java-apps/target/sparkjobs-1.0.0-SNAPSHOT.jar /data/tweets.json /data/HaveTweets`<br/>
+**_Basic Flat Map by reading a file:_**<br/>`docker exec -ti ApplicationSubmitter sh StartApplication.sh --class  com.databootcamp.sparkjobs.BasicFlatMap /apps/java-apps/target/sparkjobs-1.0.0-SNAPSHOT.jar /data/spark.txt`<br/>
+**_Basic Avg: <br/>`docker exec -ti ApplicationSubmitter sh StartApplication.sh --class  com.databootcamp.sparkjobs.BasicAvg /apps/java-apps/target/sparkjobs-1.0.0-SNAPSHOT.jar`<br/>
+**_Expose Context with thrift server:_**<br/>
+- start standalone thrift server:<br/>`docker exec -ti ApplicationSubmitter sh StartApplication.sh --class com.databootcamp.sparkjobs.ExposeContextWithLiveThrift /apps/java-apps/target/sparkjobs-1.0.0-SNAPSHOT.jar \`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}},{{end}}' ApplicationSubmitter | cut -d',' -f1\` 10011 /data/tweets.json exposethecontext`<br/>
+- start standalone thrift server:<br/>
+`beeline -u jdbc:hive2://IP_TO_SPARK_EXECUTOR:10011`<br/>
+`0: jdbc:hive2://172.28.0.5:10011> show tables;)`<br/>
