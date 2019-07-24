@@ -39,13 +39,37 @@ Docker compose will bind this local directory on `/data` directory of started co
 **_Export json file to Hive table:_** to keep data and meta-data we should configure hive-site.xml, core-site.xml (for security configuration), and hdfs-site.xml (for HDFS configuration) file in conf/<br/>
 ` docker exec -ti ApplicationSubmitter sh StartApplication.sh --class
 com.databootcamp.sparkjobs.SaveHive /apps/java-apps/target/sparkjobs-1.0.0-SNAPSHOT.jar /data/tweets.json tweets`<br/>
+<br/>
+
 **_Read Streaming from Flume Agent (polling mode) and save in Hbase table (in batch mode):_**<br/>
-#### Start Flume Service: <br/>
+##### - Start Flume Service: <br/>
 please refer to the example described in the "Flume" repository: [MedAmineBB/Flume](https://github.com/MedAmineBB/Flume)<br/>
-#### Start HBase Cluser Service:<br/>
+##### - Start HBase Cluser Service:<br/>
 please refert to the how to describe in the "Hbase" repository: [MedAmineBB/HdfsHadoop](https://github.com/MedAmineBB/HdfsHadoop) by applying section "Launch Hdfs and Hbase"<br/>
-#### Connect Hbase, Spark and Flume containers: <br/>
-#### Start Spark Job (from streaming data to batch data): <br/>
+##### - Connect Hbase, Spark and Flume containers: <br/>
+```
+$ # Create a network where we will expose all dockers that shall communicate in this example
+$ docker network create -d bridge --subnet 172.28.0.0/16 bridge_nw
+$ # Expose Hbase layer (zookeeper, HMaster and Region Servers)
+$ docker network connect bridge_nw zoo1
+$ docker network connect bridge_nw zoo2
+$ docker network connect bridge_nw zoo3
+$ docker network connect bridge_nw rs1
+$ docker network connect bridge_nw rs2
+$ docker network connect bridge_nw rs3
+$ docker network connect bridge_nw hm1
+$ docker network connect bridge_nw hm2
+$ # Expose Flume layer
+$ docker network connect bridge_nw relayer
+$ # Expose Spark AllplicationSubmitter, Slaves, masters
+$ docker network connect ApplicationSubmitter
+$ docker network connect ownspark_LocalClusterNetwork.spark.Slave_COMPLETE_THAT
+$ docker network connect Master0
+$ docker network connect Master1
+```
+<br/>
+
+##### - Start Spark Job (from streaming data to batch data):
 ```
 EXTRA_JARS=`docker exec -ti ApplicationSubmitter sh -c 'ls -p /apps/java-apps/target/libs/*.jar | tr "\n" ","'` sh -c 'docker exec -ti ApplicationSubmitter sh StartApplication.sh --jars $EXTRA_JARS --class com.databootcamp.sparkjobs.StreamingFromFlumeToHBase /apps/java-apps/target/sparkjobs-1.0.0-SNAPSHOT.jar relayer 4545 zoo1,zoo2,zoo3 2181 databootcamp netcat data'
 ```
