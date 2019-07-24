@@ -45,7 +45,7 @@ com.databootcamp.sparkjobs.SaveHive /apps/java-apps/target/sparkjobs-1.0.0-SNAPS
 ##### - Start Flume Service: <br/>
 please refer to the example described in the "Flume" repository: [MedAmineBB/Flume](https://github.com/MedAmineBB/Flume)<br/>
 ##### - Start HBase Cluser Service:<br/>
-please refert to the how to describe in the "Hbase" repository: [MedAmineBB/HdfsHadoop](https://github.com/MedAmineBB/HdfsHadoop) by applying section "Launch Hdfs and Hbase"<br/>
+please refert to the how to describe in the "Hbase" repository: [MedAmineBB/HBaseWithHDFS](https://github.com/MedAmineBB/HBaseWithHDFS) by applying section "Launch Hdfs and Hbase"<br/>
 ##### - Connect Hbase, Spark and Flume containers: <br/>
 ```
 $ # Create a network where we will expose all dockers that shall communicate in this example
