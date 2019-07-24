@@ -42,5 +42,5 @@ then
     WAREHOUSE_DIR="/data/warehouse"
 fi
 
-./spark/sbin/start-thriftserver.sh --conf spark.sql.warehouse.dir=$WAREHOUSE_DIR --total-executor-cores $TOTAL_EXECUTORS --master $SPARK_MASTERI
+./spark/sbin/start-thriftserver.sh --hiveconf hive.server2.thrift.port=10000 --hiveconf hive.server2.thrift.bind.host=0.0.0.0 --conf spark.sql.warehouse.dir=$WAREHOUSE_DIR --total-executor-cores $TOTAL_EXECUTORS --master $SPARK_MASTERI
 tail -f /dev/null
