@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.databootcamp</groupId>
     <artifactId>sparkjobs</artifactId>
@@ -36,7 +36,19 @@
             <artifactId>hbase-client</artifactId>
             <version>2.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.hortonworks</groupId>
+            <artifactId>shc-core</artifactId>
+            <version>1.1.1-2.1-s_2.11</version>
+        </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>hortonworks</id>
+            <name>Hortonworks Repository</name>
+            <url>http://repo.hortonworks.com/content/repositories/releases/</url>
+        </repository>
+    </repositories>
     <build>
         <plugins>
             <plugin>

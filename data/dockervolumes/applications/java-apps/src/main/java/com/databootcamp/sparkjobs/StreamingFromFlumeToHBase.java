@@ -61,7 +61,7 @@ public class StreamingFromFlumeToHBase {
                     values.foreach(
                             (tuple) -> {
                                 HBaseCounterIncrementor incrementor = HBaseCounterIncrementor.getInstance(hbaseZookeeperQuorumHost, hbaseZookeeperPort, serviceName, tableName, columnFamily);
-                                incrementor.incerment("Counter", tuple._1(), tuple._2());
+                                incrementor.incerment(tuple._1(), "Counter", tuple._2());
                             }
                     );
                 });
